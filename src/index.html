@@ -1,0 +1,57 @@
+<html>
+
+<body>
+	<h1>Hello world</h1>
+	<canvas id="myCanvas" width="168" height="64" style="border:1px solid #000000;">
+	</canvas>
+	<form action="" method="POST" style="display:flex; flex-direction:column;">
+		<div style="margin: 2;">
+			<label for="x">x</label>
+			<input id="x" type="number">
+		</div>
+		<div style="margin: 2;">
+			<label for="y">y</label>
+			<input id="y" type="number">
+		</div>
+		<button id="submit_btn" type="button">submit</button>
+	</form>
+	<script>
+		async function submitFunc() {
+			const x = document.getElementById("x").valueAsNumber;
+			const y = document.getElementById("y").valueAsNumber;
+			console.log(x, y);
+			const res = await fetch("/", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json"
+				},
+				body: JSON.stringify({"x": x, "y": y})
+			}).then((res) => {
+				console.log(res);
+				return res.json();
+			});
+			var c = document.getElementById("myCanvas");
+			var ctx = c.getContext("2d");
+			ctx.moveTo(res.x, 0);
+			ctx.lineTo(res.x, 64);
+			ctx.stroke();
+		}
+		document.getElementById("submit_btn").addEventListener("click", submitFunc);
+	</script>
+	<script>
+		function drawCircle(x, y) {
+			var c = document.getElementById("myCanvas");
+			var ctx = c.getContext("2d");
+			ctx.beginPath();
+			ctx.arc(x, y, 5, 0, 2 * Math.PI);
+			ctx.stroke();
+		}
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		ctx.moveTo(168 / 2, 0);
+		ctx.lineTo(168 / 2, 64);
+		ctx.stroke();
+	</script>
+</body>
+
+</html>
